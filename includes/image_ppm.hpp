@@ -24,7 +24,7 @@ public:
   // copy constructor.
   //
   // should intialize the instance as DEEP COPY of source (meaning all
-  // values should be the same, but chaning source will not change
+  // values should be the same, but changing source will not change
   // anything in this instance, and vice versa)
   ImagePPM(const ImagePPM& source);
 
@@ -42,7 +42,7 @@ public:
 
   // returns the Pixel at row col. You may assume that row and col
   // will always be within the bounds of image_
-  Pixel GetPixel(int row, int col) const;
+  Pixel GetPixel(int row, int col) const {return pixels_[row][col]; };
 
   // returns the width of the image
   int GetWidth() const { return width_; };
@@ -59,6 +59,10 @@ public:
   // fills in image using the input stream, is. the stream contains
   // an image in plain PPM format
   friend std::istream& operator>>(std::istream& is, ImagePPM& image);
+
+  void RemoveHorizontalSeam(const int* seam);
+
+  void RemoveVerticalSeam(const int* seam);
 
   /**
    * Add any helper methods you may need

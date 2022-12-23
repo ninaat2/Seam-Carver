@@ -23,13 +23,13 @@ public:
   void SetImage(const ImagePPM& image);
 
   // returns the instance's image_
-  const ImagePPM& GetImage() const;
+  const ImagePPM& GetImage() const { return image_; };
 
   // returns the image's height
-  int GetHeight() const;
+  int GetHeight() const { return height_; };
 
   // returns the image's width
-  int GetWidth() const;
+  int GetWidth() const { return width_; };
 
   // returns the energy of the pixel at row col in image_
   int GetEnergy(int row, int col) const;
@@ -116,6 +116,14 @@ private:
   ImagePPM image_;
   int height_ = 0;
   int width_ = 0;
+    
+  void FindHorizontalSeam(int** values) const;
+
+  void FindVerticalSeam(int** values) const;
+
+  void TraceSeamVertical(int* &path_cols, int** values) const;
+
+  void TraceSeamHorizontal(int* &path_rows, int** values) const;
 
   /**
    * Add any helper methods you may need

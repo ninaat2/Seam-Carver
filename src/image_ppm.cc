@@ -1,5 +1,8 @@
 #include "image_ppm.hpp"
 
+#include <fstream>
+#include <iostream>
+
 // implement the rest of ImagePPM's functions here
 
 // given functions below, DO NOT MODIFY
@@ -85,4 +88,44 @@ std::istream& operator>>(std::istream& is, ImagePPM& image) {
     }
   }
   return is;
+}
+
+std::ostream& operator<<(std::ostream& os, const ImagePPM& image) {
+  // if (!os.open()) {
+  //     throw std::runtime_error("ofstream not opening");
+  // }
+  os << "P3 \n"
+     << image.width_ << ' ' << image.height_ << "\n"
+     << image.max_color_value_ << std::endl;
+  for (int row = 0; row < image.height_; ++row) {
+    for (int col = 0; col < image.width_; ++col) {
+      int red = image.GetPixel(row, col).GetRed();
+      int green = image.GetPixel(row, col).GetGreen();
+      int blue = image.GetPixel(row, col).GetBlue();
+      os << red << "\n" << green << "\n" << blue << std::endl;
+    }
+  }
+  return os;
+}
+
+int ImagePPM::GetMaxColorValue() const { return max_color_value_; };
+
+void ImagePPM::RemoveHorizontalSeam(const int* seam) {
+  for (int col = 0; col < width_; ++col) {
+    for (int row = seam[col]; row < height_ - 1; ++row) {
+      pixels_[row][col] = pixels_[row + 1][col];
+    }
+  }
+  delete[] pixels_[height_ - 1];
+  pixels_[height_ - 1] = nullptr;
+  height_ = height_ - 1;
+}
+
+void ImagePPM::RemoveVerticalSeam(const int* seam) {
+  for (int row = 0; row < height_; ++row) {
+    for (int col = seam[row]; col < width_ - 1; ++col) {
+      pixels_[row][col] = pixels_[row][col + 1];
+    }
+  }
+  width_ = width_ - 1;
 }
